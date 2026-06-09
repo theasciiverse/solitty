@@ -1,0 +1,15 @@
+Source: solitty
+Section: games
+Priority: optional
+Maintainer: David <david@katalystnord.com>
+Build-Depends: debhelper-compat (= 13), libncurses-dev
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: solitty
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: ncurses-based klondike solitaire game
+ A terminal Klondike solitaire game with UTF-8 card symbols,
+ keyboard (arrow keys / hjkl) and mouse (click to pick up and
+ place, right-click to cancel) support.

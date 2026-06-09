@@ -1,0 +1,49 @@
+# -*-org-*-
+
+* CHANGELOG
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.4.1][v1.4.1]] (2025-04-19)
+*** Chores
+    - Fix function prototypes. [[https://github.com/mpereira/solitty/pull/71][(#71)]]
+    - Make Makefile ncurses flags handling in Makefile more flexible.
+      [[https://github.com/mpereira/solitty/pull/70][(#70)]]
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.3.0][v1.4.0]] (2025-04-17)
+*** Features
+    - Double tap on a card to automatically move it to a foundation
+      pile if there's a valid move. [[https://github.com/mpereira/solitty/pull/69][(#69)]]
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.3.0][v1.3.1]] (2021-09-03)
+*** Improvements
+    - Made only executable basename be shown in shell output. [[https://github.com/mpereira/solitty/pull/60][(#60)]]
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.3.0][v1.3.0]] (2020-06-01)
+*** Features
+    - [[https://en.wikipedia.org/wiki/Four-color_deck][Four-color deck]] mode via =--four-color-deck=. [[https://github.com/mpereira/solitty/pull/43][(#43)]]
+    - "No background color" mode via =--no-background-color=. [[https://github.com/mpereira/solitty/pull/31][(#31)]]
+
+*** Bug fixes
+    - Fixed building with latest GCC (reported in [[https://github.com/mpereira/solitty/issues/40][#40]]). [[https://github.com/mpereira/solitty/pull/42][(#42)]]
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.2.0][v1.2.0]] (2020-05-31)
+*** Bug fixes
+    - Fixed off-by-one issue in ~game:shuffle_deck()~. [[https://github.com/mpereira/solitty/pull/35][(#35)]]
+    - Fixed memory leaks in game and test code. [[https://github.com/mpereira/solitty/pull/35][(#35)]]
+    - Fixed broken tests. [[https://github.com/mpereira/solitty/pull/35][(#35)]]
+    - Fixed card drawing issue that came up due to changes in newer versions of
+      Ncurses. ([[https://github.com/mpereira/solitty/pull/41][#41]])
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.1.1][v1.1.1]] (2018-11-10)
+*** Improvements
+    - Added LICENSE.
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.1.0][v1.1.0]] (2018-08-12)
+*** Features
+    - ~M~ and ~N~ select and deselect (respectively) all cards in a stack. [[https://github.com/mpereira/solitty/pull/20][(#20]])
+    - Game now automatically detects a "win" situation. [[https://github.com/mpereira/solitty/pull/23][(#23]])
+*** Improvements
+    - Version is now stored in the binary instead of a text file. [[https://github.com/mpereira/solitty/pull/26][(#26]])
+    - Some compiler and linker flags are now overridable. [[https://github.com/mpereira/solitty/pull/15][(#15]])
+
+** [[https://github.com/mpereira/solitty/releases/tag/v1.0.0][v1.0.0]] (2017-01-07)
+   - Initial release.

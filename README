@@ -1,0 +1,73 @@
+# -*-org-*-
+
+* solitty
+  Ncurses-based klondike solitaire game.
+
+  #+CAPTION: solitty gameplay
+  [[./resources/solitty.gif]]
+
+** Dependencies
+   - Terminal emulator with UTF-8 support
+   - C library with multibyte locales support
+   - Ncurses with wide-char/UTF-8 support
+
+** Install
+*** From source
+**** Install Ncurses
+     solitty depends on Ncurses. Some platforms provide it out of the box
+     and some don't, so you might need to install it yourself.
+
+***** Ubuntu
+      #+begin_src bash
+      sudo apt-get install libncurses5-dev libncursesw5-dev
+      #+end_src
+
+***** macOS
+      macOS has Ncurses with wide character support out of the box, so *there's
+      nothing you need to do*.
+
+**** Build and install solitty
+     #+begin_src bash
+     git clone https://github.com/katalystnord/solitty.git
+     cd solitty
+     make
+     sudo make install
+     #+end_src
+
+** Play
+   Run in your favorite shell:
+
+   #+begin_src bash
+   solitty
+   #+end_src
+
+** Usage
+   #+begin_src text
+   usage: ./solitty [OPTIONS]
+     -v, --version              Show version
+     -h, --help                 Show this message
+     -p, --passes               Number of passes through the deck  (default: 3)
+         --four-color-deck      Draw unique card suit colors       (default: false)
+         --no-background-color  Don't draw background color        (default: false)
+   #+end_src
+
+** Development
+*** Get the code
+    #+begin_src bash
+    git clone https://github.com/katalystnord/solitty.git
+    #+end_src
+
+*** Run the unit tests
+    #+begin_src bash
+    make test
+    #+end_src
+
+*** [[https://invisible-island.net/ncurses/man/ncurses.3x.html][Ncurses documentation]]
+
+*** [[https://tldp.org/HOWTO/NCURSES-Programming-HOWTO/][Ncurses programming HOWTO]]
+
+** Author
+   [[http://murilopereira.com][Murilo Pereira]]
+
+** License
+   [[./LICENSE][MIT]]

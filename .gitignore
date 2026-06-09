@@ -1,0 +1,9 @@
+**/*.o
+/solitty*
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/solitty/
+debian/solitty-dbgsym/
+debian/*.substvars
+debian/*.debhelper.log

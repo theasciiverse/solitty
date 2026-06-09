@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_install:
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/solitty PREFIX=/usr
+
+override_dh_auto_test:
+	: # tests require an interactive terminal; skipped during package build
