@@ -28,7 +28,7 @@
 
 **** Build and install solitty
      #+begin_src bash
-     git clone https://github.com/katalystnord/solitty.git
+     git clone https://github.com/theasciiverse/solitty.git
      cd solitty
      make
      sudo make install
@@ -54,7 +54,7 @@
 ** Development
 *** Get the code
     #+begin_src bash
-    git clone https://github.com/katalystnord/solitty.git
+    git clone https://github.com/theasciiverse/solitty.git
     #+end_src
 
 *** Run the unit tests

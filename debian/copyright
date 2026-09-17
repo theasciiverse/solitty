@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: solitty
-Upstream-Contact: david@katalystnord.com
+Upstream-Contact: Murilo Pereira <murilo@murilopereira.com>
 
 Files: *
 Copyright: 2010-2018 Murilo Pereira <murilo@murilopereira.com>

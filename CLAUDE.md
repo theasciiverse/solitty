@@ -1,7 +1,7 @@
 # solitty
 
 Ncurses-based Klondike solitaire, part of the Asciiverse catalog. Upstream project by Murilo Pereira,
-packaged/maintained here at github.com/katalystnord/solitty.
+packaged/maintained here at github.com/theasciiverse/solitty.
 
 ## Building
 
