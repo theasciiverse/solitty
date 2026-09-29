@@ -1,9 +1,12 @@
 #include <errno.h>
 #include <getopt.h>
 #include <libgen.h>
+#include <limits.h>
 #include <locale.h>
 #include <ncurses.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "common.h"
 #include "game.h"
@@ -20,6 +23,24 @@ struct game game;
 void version(void);
 void usage(const char *);
 void draw_greeting(void);
+
+/* Parse the --passes argument: a whole number of at least 1. Anything else
+ * (garbage, 0, negative, overflow) is rejected instead of silently becoming
+ * 0 via atoi(). */
+static int parse_passes(const char *arg) {
+  char *end;
+  long passes;
+
+  errno = 0;
+  passes = strtol(arg, &end, 10);
+  if (errno != 0 || end == arg || *end != '\0' || passes < 1 ||
+      passes > INT_MAX) {
+    fprintf(stderr, "%s: --passes expects a whole number of at least 1, got \"%s\"\n",
+            program_name, arg);
+    exit(1);
+  }
+  return ((int)passes);
+}
 
 int main(int argc, char *argv[]) {
   int option;
@@ -44,22 +65,23 @@ int main(int argc, char *argv[]) {
       version();
       exit(0);
     case 'p':
-      passes_through_deck = atoi(optarg);
+      passes_through_deck = parse_passes(optarg);
       break;
     case 'h':
     case '?':
       usage(program_name);
       exit(0);
     case 0:
-      /* If this option set a "no_argument" flag, do nothing else now. */
-      printf("options[option_index].name: %s\n", options[option_index].name);
-      if (options[option_index].flag != 0)
-        break;
+      /* A flag option such as --four-color-deck; getopt_long already set it. */
+      break;
     default:
       usage(program_name);
       exit(0);
     }
   }
+
+  /* Seed once per process, not once per shuffle. */
+  srand(time(NULL));
 
   setlocale(LC_ALL, "");
   initscr();
