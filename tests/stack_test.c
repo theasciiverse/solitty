@@ -191,6 +191,29 @@ void test_stack_pop_on_stack_with_one_element() {
   card_free(stack_popped_card);
 }
 
+void test_stack_pop_on_stack_with_one_element_keeps_popped_card() {
+  struct stack *stack;
+  struct card *card, *stack_popped_card;
+
+  card_malloc(&card);
+  card_init(card);
+  card_set(card, ACE, SPADES, EXPOSED, 0, 0);
+
+  stack_malloc(&stack);
+  stack_init(stack);
+  stack_push(&stack, card);
+  stack_popped_card = stack_pop(&stack);
+
+  assert(stack_popped_card == card);
+  assert(stack->card != stack_popped_card);
+  assert(stack_popped_card->value == ACE);
+  assert(stack_popped_card->suit == SPADES);
+  assert(stack_popped_card->face == EXPOSED);
+
+  stack_free(stack);
+  card_free(stack_popped_card);
+}
+
 void test_stack_pop_on_stack_with_more_than_one_element() {
   struct stack *stack, *old_stack_next;
   struct card *card[3], *stack_popped_card;
@@ -315,6 +338,7 @@ void test_stack() {
   test_stack_push_null_on_stack_empty_stack();
 
   test_stack_pop_on_stack_empty_stack();
+  test_stack_pop_on_stack_with_one_element_keeps_popped_card();
   test_stack_pop_on_stack_with_one_element();
   test_stack_pop_on_stack_with_more_than_one_element();
 
