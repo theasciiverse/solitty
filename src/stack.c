@@ -74,7 +74,10 @@ void stack_push(struct stack **stack, struct card *card) {
     } else {
       /* Allocating by hand because stack_malloc() would
        * have allocated an unwanted card object. */
-      struct stack *new_stack = malloc(sizeof(*new_stack));
+      struct stack *new_stack;
+      if (!(new_stack = malloc(sizeof(*new_stack)))) {
+        tty_solitaire_generic_error(errno, __FILE__, __LINE__);
+      }
       new_stack->card = card;
       new_stack->next = (*stack);
       *stack = new_stack;
