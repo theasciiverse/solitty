@@ -1,6 +1,7 @@
 #include <assert.h>
 #include "../src/stack.h"
 #include "../src/game.h"
+#include "../src/cursor.h"
 #include "test_helper.h"
 
 void test_valid_move_from_stock_to_stock() {
@@ -540,6 +541,52 @@ void test_move_card_should_not_change_stack_empty_stack_coordinates() {
   stack_free(destination);
 }
 
+void test_move_block_between_maneuvre_stacks() {
+  struct stack *origin, *destination;
+  struct card *card[3];
+  int origin_x = MANEUVRE_0_BEGIN_X, destination_x = MANEUVRE_1_BEGIN_X;
+  int y = MANEUVRE_BEGIN_Y;
+
+  cursor_malloc(&cursor);
+  cursor_init(cursor);
+  stack_malloc(&origin);
+  stack_malloc(&destination);
+  stack_init(origin);
+  stack_init(destination);
+  card_set(origin->card, NO_VALUE, NO_SUIT, NO_FACE, y, origin_x);
+  card_set(destination->card, NO_VALUE, NO_SUIT, NO_FACE, y, destination_x);
+  for (int i = 0; i < 3; i++) {
+    card_malloc(&card[i]);
+  }
+  card_set(card[0], KING, HEARTS, EXPOSED, y, origin_x);
+  card_set(card[1], QUEEN, SPADES, EXPOSED, y + 1, origin_x);
+  card_set(card[2], JACK, HEARTS, EXPOSED, y + 2, origin_x);
+  stack_push(&origin, card[0]);
+  stack_push(&origin, card[1]);
+  stack_push(&origin, card[2]);
+  card_malloc(&card[0]);
+  card_set(card[0], KING, DIAMONDS, EXPOSED, y, destination_x);
+  stack_push(&destination, card[0]);
+
+  move_block(&origin, &destination, 2);
+
+  assert(stack_length(origin) == 1);
+  assert(origin->card->value == KING && origin->card->suit == HEARTS);
+  assert(stack_length(destination) == 3);
+  assert(destination->card->value == JACK);
+  assert(destination->card->frame->begin_y == y + 2);
+  assert(destination->card->frame->begin_x == destination_x);
+  assert(destination->next->card->value == QUEEN);
+  assert(destination->next->card->frame->begin_y == y + 1);
+  assert(destination->next->card->frame->begin_x == destination_x);
+  assert(destination->next->next->card->value == KING);
+  assert(destination->next->next->card->suit == DIAMONDS);
+
+  stack_free(origin);
+  stack_free(destination);
+  cursor_free(cursor);
+}
+
 void test_game() {
   test_valid_move_from_stock_to_stock();
   test_valid_move_from_stock_to_waste_pile();
@@ -563,4 +610,5 @@ void test_game() {
   test_move_card_from_non_stack_empty_stack_to_stack_empty_stack();
   test_move_card_from_non_stack_empty_stack_to_non_stack_empty_stack();
   test_move_card_should_not_change_stack_empty_stack_coordinates();
+  test_move_block_between_maneuvre_stacks();
 }

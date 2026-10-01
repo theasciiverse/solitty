@@ -19,38 +19,35 @@ static void draw_value(struct card *card) {
 }
 
 static void draw_suit(struct card *card) {
+  int color_pair;
+
   if (game.four_color_deck == 0) {
-    if (card->suit % 2 == 0) {
-      wattron(card->frame->window, COLOR_PAIR(RED_ON_WHITE));
-    } else {
-      wattron(card->frame->window, COLOR_PAIR(BLACK_ON_WHITE));
-    }
+    color_pair = (card->suit % 2 == 0) ? RED_ON_WHITE : BLACK_ON_WHITE;
   } else {
     switch (card->suit) {
     case SPADES:
-      wattron(card->frame->window, COLOR_PAIR(GREEN_ON_WHITE));
+      color_pair = GREEN_ON_WHITE;
       break;
     case DIAMONDS:
-      wattron(card->frame->window, COLOR_PAIR(YELLOW_ON_WHITE));
+      color_pair = YELLOW_ON_WHITE;
       break;
     case CLUBS:
-      wattron(card->frame->window, COLOR_PAIR(BLACK_ON_WHITE));
+      color_pair = BLACK_ON_WHITE;
       break;
     case HEARTS:
     default:
-      wattron(card->frame->window, COLOR_PAIR(RED_ON_WHITE));
+      color_pair = RED_ON_WHITE;
       break;
     }
   }
+  /* Turn off the same pair that was turned on. The four-color deck uses
+   * green and yellow too, which the old red/black-only wattroff left on. */
+  wattron(card->frame->window, COLOR_PAIR(color_pair));
   mvwprintw(card->frame->window, 0, strlen(card_values[card->value]),
             "%s", card_suits[card->suit]);
   mvwprintw(card->frame->window, 4, 5 - strlen(card_values[card->value]),
             "%s", card_suits[card->suit]);
-  if (card->suit % 2 == 0) {
-    wattroff(card->frame->window, COLOR_PAIR(RED_ON_WHITE));
-  } else {
-    wattroff(card->frame->window, COLOR_PAIR(BLACK_ON_WHITE));
-  }
+  wattroff(card->frame->window, COLOR_PAIR(color_pair));
 }
 
 static void draw_front(struct card *card) {

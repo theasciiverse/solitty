@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 #include "card.h"
 #include "common.h"
@@ -158,7 +157,7 @@ static void fill_deck(struct deck *deck) {
 }
 
 static void shuffle_deck(struct deck *deck) {
-  struct card **card, tmp;
+  struct card **card, *tmp;
   int random;
 
   if (!(card = malloc(NUMBER_OF_CARDS * sizeof(*card)))) {
@@ -167,12 +166,15 @@ static void shuffle_deck(struct deck *deck) {
   for (int i = 0; i < NUMBER_OF_CARDS; i++) {
     card[i] = stack_pop(&(deck->stock));
   }
-  srand(time(NULL));
-  for (int i = 0; i < NUMBER_OF_CARDS; i++) {
-    random = rand() % (NUMBER_OF_CARDS);
-    tmp = *card[i];
-    *card[i] = (*card[random]);
-    *card[random] = tmp;
+  /* Fisher-Yates: swap each position with one at or below it, so every
+   * ordering of the deck is equally likely. Picking from the whole deck on
+   * every step (the previous version) biases some orderings. The RNG is
+   * seeded once in main(). */
+  for (int i = NUMBER_OF_CARDS - 1; i > 0; i--) {
+    random = rand() % (i + 1);
+    tmp = card[i];
+    card[i] = card[random];
+    card[random] = tmp;
   }
   for (int i = 0; i < NUMBER_OF_CARDS; i++) {
     stack_push(&(deck->stock), card[i]);
