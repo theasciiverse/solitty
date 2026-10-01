@@ -1,5 +1,4 @@
 # TODO
-- signal handling
 - turn either 1 or 3 cards to the waste pile (configurable)
 - {cursor,label,hacker} mode (configurable)
 - undo
