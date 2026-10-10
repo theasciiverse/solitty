@@ -117,6 +117,17 @@ static int marked_cards_count(struct stack *stack) {
   return(0);
 }
 
+/* Put a cursor that is in the maneuvre row back under its column's top
+ * card. Called after every drop or cancel, so the cursor ends up in the
+ * right place whatever the move did (a card or block landing on an empty
+ * column, the auto-move to a foundation, or no move at all). */
+static void cursor_to_top_card(struct cursor *cursor) {
+  if (cursor->y > CURSOR_BEGIN_Y + g_y_offset) {
+    cursor_move(cursor, UP);
+    cursor_move(cursor, DOWN);
+  }
+}
+
 static void unmark_cards(struct stack *stack) {
   int _marked_cards_count = marked_cards_count(stack);
   for (int i = 0; i < _marked_cards_count; stack = stack->next, i++) {
@@ -239,9 +250,6 @@ static void handle_card_movement(struct cursor *cursor) {
             }
           } else {
             if (valid_move(*origin, *destination)) {
-              if (maneuvre_stack(*destination)) {
-                cursor->y++;
-              }
               move_card(origin, destination);
             }
           }
@@ -250,9 +258,10 @@ static void handle_card_movement(struct cursor *cursor) {
           if (*origin == *destination && ((maneuvre_stack(*origin)  && _marked_cards_count == 1) || waste_pile_stack(*origin))) {
             /* see if we can automatically move card to foundation */
             for (int i = 0; i <= 3; ++i) {
-              destination = (&(deck->foundation[i]));
-              if (valid_move(*origin, *destination)) {
-                move_card(origin, destination);
+              struct stack **foundation = &(deck->foundation[i]);
+              if (valid_move(*origin, *foundation)) {
+                move_card(origin, foundation);
+                draw_stack(*foundation);
                 break;
               }
             }
@@ -260,28 +269,22 @@ static void handle_card_movement(struct cursor *cursor) {
 
           draw_stack(*origin);
           draw_stack(*destination);
-          if (maneuvre_stack(*origin) && *origin == *destination) {
-            erase_cursor(cursor);
-            cursor->y--;
-          }
         }
+        erase_cursor(cursor);
+        cursor_to_top_card(cursor);
         cursor_unmark(cursor);
         draw_cursor(cursor);
         return;
       case KEY_ESCAPE:
-        if (cursor_stack(cursor) == origin && maneuvre_stack(*origin)) {
-          erase_cursor(cursor);
-          cursor->y--;
-        }
         if (marked_cards_count(*origin) > 0 && maneuvre_stack(*origin)) {
           erase_stack(*origin);
           unmark_cards(*origin);
           draw_stack(*origin);
         }
-        if (cursor->marked) {
-          cursor_unmark(cursor);
-          draw_cursor(cursor);
-        }
+        erase_cursor(cursor);
+        cursor_to_top_card(cursor);
+        cursor_unmark(cursor);
+        draw_cursor(cursor);
         return;
       case KEY_MOUSE:;
         MEVENT mevent_mv;
@@ -292,11 +295,6 @@ static void handle_card_movement(struct cursor *cursor) {
       case KEY_RESIZE:
         handle_term_resize();
         break;
-      case 'q':
-      case 'Q':
-        endwin();
-        game_end();
-        exit(0);
       }
     } else if (key == KEY_RESIZE) {
       handle_term_resize();

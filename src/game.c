@@ -137,9 +137,6 @@ void move_block(struct stack **origin, struct stack **destination,
   for (int i = 0; i < block_size; i++) {
     move_card(&tmp, destination);
   }
-  if (stack_length(*destination) > 1) {
-    cursor->y += block_size;
-  }
   stack_free(tmp);
 }
 
